@@ -2,56 +2,7 @@
 #include <string>
 #include <vector>
 #include <map>
-
-// Bottom, Left, Right. - Collision in position data.
-
-
-// Store rotational position of the left 'L' block and allow cycling through those rotations
-struct leftL {
-    int currentRotationPointer = 0;
-    int lockRotationRow = 9;
-
-    // Store relative coordinates from a global 'centre' point to define the L shape.
-    std::map<int, std::vector<std::vector<int>>> relativePositions = { // All we need is a centre point and we can construct the shape from this data.
-        {
-            0,  {
-                    {0, -1, 2},
-                    {0, 1, -2},
-                    {-1, 1, 1}
-                }
-        },
-        {
-            1, {
-                    {-1, -1, 1},
-                    {-1, 0, -2},
-                    {1, 0, 2}
-                }
-        },
-        {
-            2, {
-                    {0, -1, 2},
-                    {1, -1, -1},
-                    {0, 1, 2}
-                }
-        },
-        {
-            3, {
-                    {-1, 0, 2},
-                    {1, 0, -2},
-                    {1, 1, 2}
-                }
-        }
-    };
-
-    std::vector<std::vector<int>> activePosition = relativePositions[currentRotationPointer]; // Keep track of currently active position (rotation)
-
-    void updateActivePosition() { // Cycle rotation when method is called
-        currentRotationPointer += 1;
-        currentRotationPointer %= relativePositions.size();
-        
-        activePosition = relativePositions[currentRotationPointer];
-    }
-};
+#include "pieces.h"
 
 int main() {
     std::vector<std::vector<char>> board = {
@@ -75,7 +26,7 @@ int main() {
         int y;
     };
 
-    leftL L; // Initialse 'L' piece (will be random)
+    Line_Piece L; // Initialse 'L' piece (will be random)
 
     char input;
 
@@ -148,9 +99,6 @@ int main() {
 // Rotation at the bottom of the board will crash. (Piece will move out of vector bounds)
 // Can rotate at sides, which will elminate side tile hence eliminating side collision
 
-
 // TODO 
-// Add every other piece to the game (tedious process)
 // Improve collision (no clue how to do this yet)
 // Check for rotation validity (maybe move centre if new rotation point is out of bounds)
-// Multithread rendering loop and input loop. This will allow input to be typed without blocking rendering.
